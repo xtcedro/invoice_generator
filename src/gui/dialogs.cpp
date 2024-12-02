@@ -1,5 +1,5 @@
 #include <gtk/gtk.h>
-#include "dialogs.h"
+#include "gui/dialogs.h"
 
 // Function to show the About dialog
 void show_about_dialog(GtkWindow *parent_window) {
