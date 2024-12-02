@@ -1,6 +1,6 @@
 #include <gtk/gtk.h>
-#include "main_window.h"
-#include "menu_bar.h"
+#include "gui/main_window.h"
+#include "gui/menu_bar.h"
 
 // Function to create the main window
 void create_main_window(GtkApplication *app) {
