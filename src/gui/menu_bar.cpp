@@ -1,6 +1,6 @@
 #include <gtk/gtk.h>
-#include "menu_bar.h"
-#include "dialogs.h"
+#include "gui/menu_bar.h"
+#include "gui/dialogs.h"
 
 // Callback for the "New Invoice" menu item
 static void on_new_invoice_activated(GtkMenuItem *menu_item, gpointer user_data) {
