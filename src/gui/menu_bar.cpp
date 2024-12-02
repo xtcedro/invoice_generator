@@ -1,6 +1,6 @@
 #include <gtk/gtk.h>
 #include "menu_bar.h"
-#include "dialogs.h" // Include dialogs for About or Preferences actions
+#include "dialogs.h"
 
 // Callback for the "New Invoice" menu item
 static void on_new_invoice_activated(GtkMenuItem *menu_item, gpointer user_data) {
@@ -8,7 +8,7 @@ static void on_new_invoice_activated(GtkMenuItem *menu_item, gpointer user_data)
     // Logic for creating a new invoice goes here
 }
 
-// Callback for the "Open" menu item
+// Callback for the "Open Invoice" menu item
 static void on_open_invoice_activated(GtkMenuItem *menu_item, gpointer user_data) {
     g_print("Open Invoice action triggered.\n");
     // Logic for opening an existing invoice goes here
@@ -22,6 +22,11 @@ static void on_quit_activated(GtkMenuItem *menu_item, gpointer app) {
 // Callback for the "About" menu item
 static void on_about_activated(GtkMenuItem *menu_item, gpointer parent_window) {
     show_about_dialog(GTK_WINDOW(parent_window));
+}
+
+// Callback for the "Preferences" menu item
+static void on_preferences_activated(GtkMenuItem *menu_item, gpointer parent_window) {
+    show_preferences_dialog(GTK_WINDOW(parent_window));
 }
 
 // Function to create the menu bar
@@ -47,6 +52,17 @@ GtkWidget* create_menu_bar(GtkApplication *app, GtkWindow *parent_window) {
     gtk_menu_shell_append(GTK_MENU_SHELL(file_menu), quit_item);
 
     gtk_menu_bar_append(GTK_MENU_BAR(menu_bar), file_item);
+
+    // Create the "Edit" menu
+    GtkWidget *edit_menu = gtk_menu_new();
+    GtkWidget *edit_item = gtk_menu_item_new_with_label("Edit");
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(edit_item), edit_menu);
+
+    GtkWidget *preferences_item = gtk_menu_item_new_with_label("Preferences");
+    g_signal_connect(preferences_item, "activate", G_CALLBACK(on_preferences_activated), parent_window);
+    gtk_menu_shell_append(GTK_MENU_SHELL(edit_menu), preferences_item);
+
+    gtk_menu_bar_append(GTK_MENU_BAR(menu_bar), edit_item);
 
     // Create the "Help" menu
     GtkWidget *help_menu = gtk_menu_new();
