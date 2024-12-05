@@ -1,5 +1,3 @@
-# /src/config/settings.py
-
 class Settings:
     """Class to hold application settings."""
 
