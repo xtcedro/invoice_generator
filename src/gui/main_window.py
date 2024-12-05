@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import Menu
+from tkinter import Menu, ttk
 import customtkinter as ctk
 from src.config.settings import Settings
 
@@ -21,13 +21,8 @@ class MainWindow:
         # Create the menu bar
         self.create_menu_bar()
 
-        # Add a simple frame using CustomTkinter
-        self.main_frame = ctk.CTkFrame(self.root)
-        self.main_frame.pack(fill="both", expand=True, padx=10, pady=10)
-
-        # Add a sample label
-        self.label = ctk.CTkLabel(self.main_frame, text="Welcome to the Invoice Generator!", font=self.settings.gui_font)
-        self.label.pack(pady=20)
+        # Add tabs to the main window
+        self.create_tabs()
 
     def create_menu_bar(self):
         """Creates the menu bar."""
@@ -46,6 +41,43 @@ class MainWindow:
         menu_bar.add_cascade(label="Help", menu=help_menu)
 
         self.root.config(menu=menu_bar)
+
+    def create_tabs(self):
+        """Creates tabs for the main application."""
+        tab_control = ttk.Notebook(self.root)
+
+        # Generate Invoice Tab
+        generate_invoice_tab = ctk.CTkFrame(tab_control)
+        tab_control.add(generate_invoice_tab, text="Generate Invoice")
+        self.create_generate_invoice_tab(generate_invoice_tab)
+
+        # Invoice History Tab
+        invoice_history_tab = ctk.CTkFrame(tab_control)
+        tab_control.add(invoice_history_tab, text="Invoice History")
+        self.create_invoice_history_tab(invoice_history_tab)
+
+        # Placeholder for the third tab
+        third_tab = ctk.CTkFrame(tab_control)
+        tab_control.add(third_tab, text="Placeholder Tab")
+        self.create_placeholder_tab(third_tab)
+
+        tab_control.pack(expand=True, fill="both")
+
+    def create_generate_invoice_tab(self, parent):
+        """Creates the content for the 'Generate Invoice' tab."""
+        label = ctk.CTkLabel(parent, text="Generate Invoice", font=self.settings.gui_font)
+        label.pack(pady=10)
+
+    def create_invoice_history_tab(self, parent):
+        """Creates the content for the 'Invoice History' tab."""
+        label = ctk.CTkLabel(parent, text="Invoice History", font=self.settings.gui_font)
+        label.pack(pady=10)
+
+    def create_placeholder_tab(self, parent):
+        """Creates the content for the placeholder tab."""
+        label = ctk.CTkLabel(parent, text="Placeholder Tab Content", font=self.settings.gui_font)
+        label.pack(pady=10)
+
 
 # For testing purposes
 if __name__ == "__main__":
