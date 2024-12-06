@@ -74,6 +74,10 @@ class MainWindow:
         self.email_entry = ctk.CTkEntry(parent, placeholder_text="Email (optional)")
         self.email_entry.pack(pady=5)
 
+        # Service Provided
+        self.service_provided_entry = ctk.CTkEntry(parent, placeholder_text="Service Provided")
+        self.service_provided_entry.pack(pady=5)
+
         # Amount Charged
         self.amount_charged_entry = ctk.CTkEntry(parent, placeholder_text="Amount Charged")
         self.amount_charged_entry.pack(pady=5)
@@ -91,7 +95,6 @@ class MainWindow:
     def validate_phone_number(self, event=None):
         """Validates and formats the phone number."""
         value = self.phone_number_entry.get()
-        cursor_position = self.phone_number_entry.index(tk.INSERT)
 
         # Remove all non-numeric characters
         cleaned = ''.join(filter(str.isdigit, value))
@@ -100,7 +103,7 @@ class MainWindow:
         if len(cleaned) > 10:
             cleaned = cleaned[:10]
 
-        # Format the number if possible
+        # Format the number
         formatted = cleaned
         if len(cleaned) >= 3:
             formatted = f"({cleaned[:3]})"
@@ -109,16 +112,10 @@ class MainWindow:
             if len(cleaned) > 6:
                 formatted += f"-{cleaned[6:]}"
 
-        # Update the entry only if the formatted value is different
+        # Update the field only if the value has changed
         if value != formatted:
             self.phone_number_entry.delete(0, tk.END)
             self.phone_number_entry.insert(0, formatted)
-
-            # Adjust the cursor position
-            if cursor_position < len(formatted):
-                self.phone_number_entry.icursor(cursor_position)
-            else:
-                self.phone_number_entry.icursor(len(formatted))
 
     def validate_amount(self, event=None):
         """Validates that the amount charged is numeric."""
@@ -131,6 +128,7 @@ class MainWindow:
         name = self.customer_name_entry.get()
         phone = self.phone_number_entry.get()
         email = self.email_entry.get()
+        service = self.service_provided_entry.get()
         amount = self.amount_charged_entry.get()
 
         # Validate inputs
@@ -143,6 +141,9 @@ class MainWindow:
         if email and "@" not in email:
             print("Error: Invalid email address.")
             return
+        if not service.strip():
+            print("Error: Service provided is required.")
+            return
         if not amount or not amount.replace(".", "", 1).isdigit():
             print("Error: Amount charged must be numeric.")
             return
@@ -152,6 +153,7 @@ class MainWindow:
         print(f"Name: {name}")
         print(f"Phone: {phone}")
         print(f"Email: {email or 'N/A'}")
+        print(f"Service: {service}")
         print(f"Amount: ${amount}")
 
 
