@@ -89,37 +89,36 @@ class MainWindow:
         label.pack(pady=10)
 
     def validate_phone_number(self, event=None):
-    """Validates and formats the phone number."""
-    value = self.phone_number_entry.get()
-    cursor_position = self.phone_number_entry.index(tk.INSERT)
+        """Validates and formats the phone number."""
+        value = self.phone_number_entry.get()
+        cursor_position = self.phone_number_entry.index(tk.INSERT)
 
-    # Remove all non-numeric characters
-    cleaned = ''.join(filter(str.isdigit, value))
+        # Remove all non-numeric characters
+        cleaned = ''.join(filter(str.isdigit, value))
 
-    # Limit to 10 digits
-    if len(cleaned) > 10:
-        cleaned = cleaned[:10]
+        # Limit to 10 digits
+        if len(cleaned) > 10:
+            cleaned = cleaned[:10]
 
-    # Format the number if possible
-    formatted = cleaned
-    if len(cleaned) >= 3:
-        formatted = f"({cleaned[:3]})"
-        if len(cleaned) > 3:
-            formatted += f" {cleaned[3:6]}"
-        if len(cleaned) > 6:
-            formatted += f"-{cleaned[6:]}"
+        # Format the number if possible
+        formatted = cleaned
+        if len(cleaned) >= 3:
+            formatted = f"({cleaned[:3]})"
+            if len(cleaned) > 3:
+                formatted += f" {cleaned[3:6]}"
+            if len(cleaned) > 6:
+                formatted += f"-{cleaned[6:]}"
 
-    # Update the entry only if the formatted value is different
-    if value != formatted:
-        self.phone_number_entry.delete(0, tk.END)
-        self.phone_number_entry.insert(0, formatted)
+        # Update the entry only if the formatted value is different
+        if value != formatted:
+            self.phone_number_entry.delete(0, tk.END)
+            self.phone_number_entry.insert(0, formatted)
 
-        # Adjust the cursor position
-        if cursor_position < len(formatted):
-            self.phone_number_entry.icursor(cursor_position)
-        else:
-            self.phone_number_entry.icursor(len(formatted))
-
+            # Adjust the cursor position
+            if cursor_position < len(formatted):
+                self.phone_number_entry.icursor(cursor_position)
+            else:
+                self.phone_number_entry.icursor(len(formatted))
 
     def validate_amount(self, event=None):
         """Validates that the amount charged is numeric."""
