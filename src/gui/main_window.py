@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import Menu
 import customtkinter as ctk
 from src.config.settings import Settings
+from src.gui.dialogs import Dialogs
 
 
 class MainWindow:
@@ -38,7 +39,7 @@ class MainWindow:
 
         # Help menu
         help_menu = Menu(menu_bar, tearoff=0)
-        help_menu.add_command(label="About")
+        help_menu.add_command(label="About", command=lambda: Dialogs.about_dialog(self.root))
         menu_bar.add_cascade(label="Help", menu=help_menu)
 
         self.root.config(menu=menu_bar)
@@ -121,22 +122,23 @@ class MainWindow:
 
         # Validate inputs
         if not name.strip():
-            print("Error: Customer name is required.")
+            Dialogs.show_error("Validation Error", "Customer name is required.")
             return
         if len(phone) != 10 or not phone.isdigit():
-            print("Error: Phone number must be exactly 10 digits.")
+            Dialogs.show_error("Validation Error", "Phone number must be exactly 10 digits.")
             return
         if email and "@" not in email:
-            print("Error: Invalid email address.")
+            Dialogs.show_error("Validation Error", "Invalid email address.")
             return
         if not service.strip():
-            print("Error: Service provided is required.")
+            Dialogs.show_error("Validation Error", "Service provided is required.")
             return
         if not amount or not amount.replace(".", "", 1).isdigit():
-            print("Error: Amount charged must be numeric.")
+            Dialogs.show_error("Validation Error", "Amount charged must be numeric.")
             return
 
         # Submit logic
+        Dialogs.show_info("Invoice Submitted", "The invoice has been successfully submitted!")
         print("Invoice submitted:")
         print(f"Name: {name}")
         print(f"Phone: {phone}")
