@@ -1,5 +1,3 @@
-# /src/gui/main_window.py
-
 import tkinter as tk
 from tkinter import Menu
 import customtkinter as ctk
@@ -63,7 +61,26 @@ class MainWindow:
         label = ctk.CTkLabel(parent, text="Generate Invoice", font=self.settings.gui_font)
         label.pack(pady=10)
 
-        button = ctk.CTkButton(parent, text="Create New Invoice", command=self.new_invoice)
+        # Customer Name
+        self.customer_name_entry = ctk.CTkEntry(parent, placeholder_text="Customer Name")
+        self.customer_name_entry.pack(pady=5)
+
+        # Phone Number
+        self.phone_number_entry = ctk.CTkEntry(parent, placeholder_text="Phone Number (10 digits)")
+        self.phone_number_entry.pack(pady=5)
+        self.phone_number_entry.bind("<KeyRelease>", self.validate_phone_number)
+
+        # Email (optional)
+        self.email_entry = ctk.CTkEntry(parent, placeholder_text="Email (optional)")
+        self.email_entry.pack(pady=5)
+
+        # Amount Charged
+        self.amount_charged_entry = ctk.CTkEntry(parent, placeholder_text="Amount Charged")
+        self.amount_charged_entry.pack(pady=5)
+        self.amount_charged_entry.bind("<KeyRelease>", self.validate_amount)
+
+        # Submit Button
+        button = ctk.CTkButton(parent, text="Submit Invoice", command=self.submit_invoice)
         button.pack(pady=10)
 
     def create_invoice_history_tab(self, parent):
@@ -71,16 +88,55 @@ class MainWindow:
         label = ctk.CTkLabel(parent, text="Invoice History", font=self.settings.gui_font)
         label.pack(pady=10)
 
-        button = ctk.CTkButton(parent, text="View History", command=self.view_history)
-        button.pack(pady=10)
+    def validate_phone_number(self, event=None):
+        """Validates and formats the phone number."""
+        value = self.phone_number_entry.get()
+        cleaned = ''.join(filter(str.isdigit, value))  # Remove all non-numeric characters
+        if len(cleaned) > 10:
+            self.phone_number_entry.delete(10, tk.END)
+            cleaned = cleaned[:10]
+        if len(cleaned) >= 3:
+            formatted = f"({cleaned[:3]})"
+            if len(cleaned) > 3:
+                formatted += f" {cleaned[3:6]}"
+            if len(cleaned) > 6:
+                formatted += f"-{cleaned[6:]}"
+            self.phone_number_entry.delete(0, tk.END)
+            self.phone_number_entry.insert(0, formatted)
 
-    def new_invoice(self):
-        """Placeholder function for creating a new invoice."""
-        print("New Invoice button clicked!")
+    def validate_amount(self, event=None):
+        """Validates that the amount charged is numeric."""
+        value = self.amount_charged_entry.get()
+        if not value.replace(".", "", 1).isdigit() and value:
+            self.amount_charged_entry.delete(len(value) - 1, tk.END)
 
-    def view_history(self):
-        """Placeholder function for viewing invoice history."""
-        print("View History button clicked!")
+    def submit_invoice(self):
+        """Handles the submission of the invoice."""
+        name = self.customer_name_entry.get()
+        phone = self.phone_number_entry.get()
+        email = self.email_entry.get()
+        amount = self.amount_charged_entry.get()
+
+        # Validate inputs
+        if not name.strip():
+            print("Error: Customer name is required.")
+            return
+        if len(''.join(filter(str.isdigit, phone))) != 10:
+            print("Error: Phone number must be 10 digits.")
+            return
+        if email and "@" not in email:
+            print("Error: Invalid email address.")
+            return
+        if not amount or not amount.replace(".", "", 1).isdigit():
+            print("Error: Amount charged must be numeric.")
+            return
+
+        # Submit logic
+        print("Invoice submitted:")
+        print(f"Name: {name}")
+        print(f"Phone: {phone}")
+        print(f"Email: {email or 'N/A'}")
+        print(f"Amount: ${amount}")
 
 
 # For testing purposes
