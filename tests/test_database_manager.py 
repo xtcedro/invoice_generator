@@ -1,0 +1,36 @@
+import unittest
+import os
+from src.database.database_manager import DatabaseManager
+
+class TestDatabaseManager(unittest.TestCase):
+    def setUp(self):
+        """Set up a temporary database for testing."""
+        self.db_path = "test_data/test_invoice_generator.db"
+        self.schema_path = "src/database/schema.sql"
+        os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
+        self.db_manager = DatabaseManager(db_path=self.db_path, schema_path=self.schema_path)
+
+    def tearDown(self):
+        """Clean up the test database file after each test."""
+        if os.path.exists(self.db_path):
+            os.remove(self.db_path)
+
+    def test_add_customer(self):
+        """Test adding a new customer."""
+        customer_id = self.db_manager.add_customer("John Doe", "1234567890", "johndoe@example.com")
+        customer = self.db_manager.get_customer_by_phone("1234567890")
+        self.assertIsNotNone(customer)
+        self.assertEqual(customer["name"], "John Doe")
+        self.assertEqual(customer["email"], "johndoe@example.com")
+
+    def test_add_invoice(self):
+        """Test adding a new invoice."""
+        customer_id = self.db_manager.add_customer("Jane Smith", "0987654321")
+        invoice_id = self.db_manager.add_invoice(customer_id, "Tire Change", 150.0)
+        invoices = self.db_manager.get_invoices_by_customer(customer_id)
+        self.assertEqual(len(invoices), 1)
+        self.assertEqual(invoices[0]["service"], "Tire Change")
+        self.assertEqual(invoices[0]["amount"], 150.0)
+
+if __name__ == "__main__":
+    unittest.main()
